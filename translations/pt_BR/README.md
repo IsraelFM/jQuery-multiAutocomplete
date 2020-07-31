@@ -2,7 +2,7 @@
 
 > Um plugin jQuery que permite múltiplos autocompletes em um campo de texto.
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://github.com/IsraelFM/jQuery-multiAutocomplete/blob/master/README.md) [![GitHub last commit](https://img.shields.io/github/last-commit/IsraelFM/jquery-multiAutocomplete)]() [![GitHub tag](https://img.shields.io/github/tag/IsraelFM/jquery-multiAutocomplete)]() [![GitHub created](https://img.shields.io/badge/created-july%202020-important)]() [![GitHub size js](https://img.shields.io/badge/minified_javascript-5kb-informational)]() [![GitHub size css](https://img.shields.io/badge/minified_css-981b-informational)]()
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://github.com/IsraelFM/jQuery-multiAutocomplete/blob/master/README.md) [![GitHub last commit](https://img.shields.io/github/last-commit/IsraelFM/jquery-multiAutocomplete)]() [![GitHub tag](https://img.shields.io/github/tag/IsraelFM/jquery-multiAutocomplete)]() [![GitHub created](https://img.shields.io/badge/created-july%202020-important)]() [![GitHub size js](https://img.shields.io/badge/minified_javascript-5kb-informational)]() [![GitHub size css](https://img.shields.io/badge/minified_css-~1kb-informational)]()
 
 *Leia em outros idiomas: [English](README.md).*  
 
@@ -37,7 +37,7 @@ O jQuery-multiAutocomplete foi testado com o jQuery 1.7+ nos principais navegado
 
 O jQuery-multiAutocomplete tem somente dois métodos:
 
-- `init(suggests, options)`: inicializa a instância multiAutocomplete. Se já foi inicializado anteriormente para o mesmo objeto jQuery, a instância terá seus eventos desvinculados e vinculados novamente. O parâmetro `suggests` é um array de strings e as `options` estão descritas [acima](## Métodos Suportados).
+- `init(suggests, options)`: inicializa a instância multiAutocomplete. Se já foi inicializado anteriormente para o mesmo objeto jQuery, a instância terá seus eventos desvinculados e vinculados novamente. O parâmetro `suggests` é um array de strings e as `options` estão descritas [acima](#opções-suportadas).
 - `destroy`: todos os eventos são desvinculados do objeto jQuery.
 
 Esses métodos podem ser invocados de duas maneiras. Uma delas é passar uma string com o nome do método, assim que você chamar a instância multiAutocomplete.

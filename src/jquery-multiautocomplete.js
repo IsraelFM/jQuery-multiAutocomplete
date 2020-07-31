@@ -1,6 +1,6 @@
 /**
  * jQuery-multiAutocomplete.js
- * @version: v1.0.0
+ * @version: v1.0.1
  * @author: Israel Moraes
  * 
  * Created by Israel Moraes on 2020-07-13. Please report any bug at https://github.com/IsraelFM/jQuery-multiAutocomplete
@@ -24,8 +24,7 @@
 } (function ($) {
     'use strict';
 
-    const MyPlugin = function (el, suggestions, options) {
-        let blurTimeout;
+    const MultiAutocomplete = function (el, suggestions, options) {
         let prototype = {
             events: function () {
                 el
@@ -95,28 +94,25 @@
                     }
                 })
                 .on('blur.multiAutocomplete', function () {
-                    blurTimeout = setTimeout(function () {
-                        suggestionsContainer.hide();
-                    }, 200);
+                    suggestionsContainer.hide();
                 });
                 suggestionsContainer
                 .on('mouseout.multiAutocomplete', function () {
                     $('.'+jPlugin.class.suggestion).removeClass(jPlugin.class.hover);
                 })
                 .on('mouseover.multiAutocomplete', '.'+jPlugin.class.suggestion, function () {
-                    $('.'+jPlugin.class.suggestion).eq($(this).data('index')).addClass(jPlugin.class.hover);
+                    $(this).addClass(jPlugin.class.hover);
                 })
-                .on('click.multiAutocomplete', '.'+jPlugin.class.suggestion, function () {
-                    let selectedSuggestion = suggestionsContainer.find(`.${jPlugin.class.suggestion}.${jPlugin.class.hover}`).html();
-
+                .on('mousedown.multiAutocomplete', '.'+jPlugin.class.suggestion, function (event) {
+                    let selectedSuggestion = $(this).html();
                     prototype.updateSelection(prototype.getCompletion(selectedSuggestion));
-                    suggestionsContainer.hide();
+                    prototype.createSuggestionContainers();
                     el.focus();
-                    clearTimeout(blurTimeout);
+                    event.preventDefault();
                 })
             },
             destroyEvents: function () {
-                el.off(['keydown', 'keyup', 'blur', 'mouseover', 'mouseover', 'click', ''].join('.multiAutocomplete '));
+                el.off(['keydown', 'keyup', 'blur', 'mouseout', 'mouseover', 'mousedown', ''].join('.multiAutocomplete '));
             },
             getChunk: function () {
                 let delimiters = jPlugin.options.delimiters.split(''),
@@ -219,11 +215,11 @@
         jPlugin.suggestions = suggestions;
         jPlugin.options = options;
 
-        jPlugin.destroy = function () {
+        jPlugin.destroy = function (element) {
             prototype.destroyEvents();
-            return el;
-        };
-        
+            element.removeData('multiAutocomplete');
+        }
+
         jPlugin.init = function (isInput) {
             if (isInput) {
                 jPlugin.options = $.extend({}, $.jPluginDefaults, options);
@@ -281,30 +277,29 @@
 	/**
      * Entrypoint
      * @public
-     * @param {String|Array} suggestions an array with all suggestions
+     * @param {String|Array} param an array with all suggestions or a method
      * @param {Object} options Options about the working of the plugin
      */
-	$.fn.multiAutocomplete = function (suggestions, options) {
+	$.fn.multiAutocomplete = function (param, options) {
         options = options || {};
         defaults = $.jPluginDefaults;
 
-        let myPluginFunction = function () {
-            return $(this).data('multiAutocomplete', new MyPlugin(this, suggestions, options));
+        let multiAutocompleteFunction = function () {
+            let instance = $(this).data('multiAutocomplete');
+            if (typeof param === 'string') {
+                if (instance && typeof instance[param] === 'function') {
+                    instance[param]($(this));
+                }
+            } else {
+                if (instance) instance.destroy();
+                return $(this).data('multiAutocomplete', new MultiAutocomplete(this, param, options));
+            }
         };
 
-        $(this).each(myPluginFunction);
+        $(this).each(multiAutocompleteFunction);
 
         return this;
     }
-
-    $.fn.destroy = function () {
-        return this.each(function () {
-            let dataMultiAutocomplete = $(this).data('multiAutocomplete');
-            if (dataMultiAutocomplete) {
-                dataMultiAutocomplete.destroy().removeData('multiAutocomplete');
-            }
-        });
-    };
 
     // Default options values
 	let defaults = {

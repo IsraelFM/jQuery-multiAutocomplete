@@ -2,7 +2,7 @@
 
 > A jQuery plugin that allows multiple autocompletes in a input.
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://github.com/IsraelFM/jQuery-multiAutocomplete/blob/master/README.md) [![GitHub last commit](https://img.shields.io/github/last-commit/IsraelFM/jquery-multiAutocomplete)]() [![GitHub tag](https://img.shields.io/github/tag/IsraelFM/jquery-multiAutocomplete)]() [![GitHub created](https://img.shields.io/badge/created-july%202020-important)]() [![GitHub size js](https://img.shields.io/badge/minified_javascript-5kb-informational)]() [![GitHub size css](https://img.shields.io/badge/minified_css-1.3kb-informational)]()
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://github.com/IsraelFM/jQuery-multiAutocomplete/blob/master/README.md) [![GitHub last commit](https://img.shields.io/github/last-commit/IsraelFM/jquery-multiAutocomplete)]() [![GitHub tag](https://img.shields.io/github/tag/IsraelFM/jquery-multiAutocomplete)]() [![GitHub created](https://img.shields.io/badge/created-july%202020-important)]() [![GitHub size js](https://img.shields.io/badge/minified_javascript-5kb-informational)]() [![GitHub size css](https://img.shields.io/badge/minified_css-~1kb-informational)]()
 
 *Read this in other languages: [Portuguese](translations/pt_BR/README.md).*  
 
@@ -33,11 +33,11 @@ jQuery-multiAutocomplete has been tested with jQuery 1.7+ on major browsers:
 | `stopSuggestionKeys` | `[9, 13]` | This option accepts only one array of elements. Keys that will be pressed to confirm the choice of a suggestion. By default, the keys are <kbd>Tab</kbd> or <kbd>Enter</kbd>. |
 | `ignoreCase` | `false` | Case sensitive enabled by default. If you want to make case insensitive, just set it to `true`. |
 
-## Suported methods
+## Supported methods
 
 jQuery-multiAutocomplete has a only two methods:
 
-- `init(suggests, options)`: initializes the multiAutocomplete instance. If it has already been initialized before for the same jQuery object, the instance will have its events unbind and bind again. The `suggests` parameter are one array of strings and `options` are described [above](## Suported method).
+- `init(suggests, options)`: initializes the multiAutocomplete instance. If it has already been initialized before for the same jQuery object, the instance will have its events unbind and bind again. The `suggests` parameter are one array of strings and `options` are described [above](#supported-options).
 - `destroy`: all events are unbind of the jQuery object.
 
 Theses methods can be invoked in two ways. One of them is to pass a string with the method name, as soon as you call the multiAutocomplete instance.
