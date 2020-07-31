@@ -284,11 +284,12 @@
         options = options || {};
         defaults = $.jPluginDefaults;
 
-        let myPluginFunction = function () {
-            return $(this).data('multiAutocomplete', new MyPlugin(this, suggestions, options));
+        let multiAutocompleteFunction = function () {
+            if ($(this).data('multiAutocomplete') === undefined) 
+                return $(this).data('multiAutocomplete', new MultiAutocomplete(this, suggestions, options));
         };
 
-        $(this).each(myPluginFunction);
+        $(this).each(multiAutocompleteFunction);
 
         return this;
     }
