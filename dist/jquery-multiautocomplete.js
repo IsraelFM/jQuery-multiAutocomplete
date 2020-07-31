@@ -215,11 +215,11 @@
         jPlugin.suggestions = suggestions;
         jPlugin.options = options;
 
-        jPlugin.destroy = function () {
+        jPlugin.destroy = function (element) {
             prototype.destroyEvents();
-            return el;
-        };
-        
+            element.removeData('multiAutocomplete');
+        }
+
         jPlugin.init = function (isInput) {
             if (isInput) {
                 jPlugin.options = $.extend({}, $.jPluginDefaults, options);
@@ -277,31 +277,29 @@
 	/**
      * Entrypoint
      * @public
-     * @param {String|Array} suggestions an array with all suggestions
+     * @param {String|Array} param an array with all suggestions or a method
      * @param {Object} options Options about the working of the plugin
      */
-	$.fn.multiAutocomplete = function (suggestions, options) {
+	$.fn.multiAutocomplete = function (param, options) {
         options = options || {};
         defaults = $.jPluginDefaults;
 
         let multiAutocompleteFunction = function () {
-            if ($(this).data('multiAutocomplete') === undefined) 
-                return $(this).data('multiAutocomplete', new MultiAutocomplete(this, suggestions, options));
+            let instance = $(this).data('multiAutocomplete');
+            if (typeof param === 'string') {
+                if (instance && typeof instance[param] === 'function') {
+                    instance[param]($(this));
+                }
+            } else {
+                if (instance) instance.destroy();
+                return $(this).data('multiAutocomplete', new MultiAutocomplete(this, param, options));
+            }
         };
 
         $(this).each(multiAutocompleteFunction);
 
         return this;
     }
-
-    $.fn.destroy = function () {
-        return this.each(function () {
-            let dataMultiAutocomplete = $(this).data('multiAutocomplete');
-            if (dataMultiAutocomplete) {
-                dataMultiAutocomplete.destroy().removeData('multiAutocomplete');
-            }
-        });
-    };
 
     // Default options values
 	let defaults = {
