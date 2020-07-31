@@ -1,0 +1,13 @@
+body {
+    background: #20262E;
+    padding: 20px;
+    font-family: Fira Code;
+}
+
+.form-control {
+    width: 100%;
+}
+
+.description {
+    color: #edf5ff;
+}
