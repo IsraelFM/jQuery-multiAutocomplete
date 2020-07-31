@@ -1,6 +1,6 @@
 /**
  * jQuery-multiAutocomplete.js
- * @version: v1.0.0
+ * @version: v1.0.1
  * @author: Israel Moraes
  * 
  * Created by Israel Moraes on 2020-07-13. Please report any bug at https://github.com/IsraelFM/jQuery-multiAutocomplete
@@ -24,8 +24,7 @@
 } (function ($) {
     'use strict';
 
-    const MyPlugin = function (el, suggestions, options) {
-        let blurTimeout;
+    const MultiAutocomplete = function (el, suggestions, options) {
         let prototype = {
             events: function () {
                 el
@@ -95,28 +94,25 @@
                     }
                 })
                 .on('blur.multiAutocomplete', function () {
-                    blurTimeout = setTimeout(function () {
-                        suggestionsContainer.hide();
-                    }, 200);
+                    suggestionsContainer.hide();
                 });
                 suggestionsContainer
                 .on('mouseout.multiAutocomplete', function () {
                     $('.'+jPlugin.class.suggestion).removeClass(jPlugin.class.hover);
                 })
                 .on('mouseover.multiAutocomplete', '.'+jPlugin.class.suggestion, function () {
-                    $('.'+jPlugin.class.suggestion).eq($(this).data('index')).addClass(jPlugin.class.hover);
+                    $(this).addClass(jPlugin.class.hover);
                 })
-                .on('click.multiAutocomplete', '.'+jPlugin.class.suggestion, function () {
-                    let selectedSuggestion = suggestionsContainer.find(`.${jPlugin.class.suggestion}.${jPlugin.class.hover}`).html();
-
+                .on('mousedown.multiAutocomplete', '.'+jPlugin.class.suggestion, function (event) {
+                    let selectedSuggestion = $(this).html();
                     prototype.updateSelection(prototype.getCompletion(selectedSuggestion));
-                    suggestionsContainer.hide();
+                    prototype.createSuggestionContainers();
                     el.focus();
-                    clearTimeout(blurTimeout);
+                    event.preventDefault();
                 })
             },
             destroyEvents: function () {
-                el.off(['keydown', 'keyup', 'blur', 'mouseover', 'mouseover', 'click', ''].join('.multiAutocomplete '));
+                el.off(['keydown', 'keyup', 'blur', 'mouseout', 'mouseover', 'mousedown', ''].join('.multiAutocomplete '));
             },
             getChunk: function () {
                 let delimiters = jPlugin.options.delimiters.split(''),
