@@ -231,6 +231,7 @@
                     hover: 'multiAutocomplete-hover'
                 };
 
+                el.attr('autocomplete', 'off');
                 // Creating container of suggestions
                 let suggestionsElement = utils.createContainer(jPlugin.class.suggestions); // reference to the actual DOM element
                 suggestionsContainer = el.after(suggestionsElement).next();
