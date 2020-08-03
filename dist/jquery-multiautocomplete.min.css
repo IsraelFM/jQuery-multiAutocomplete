@@ -1,6 +1,6 @@
 /**
  * jQuery-multiAutocomplete
- * @version: v1.0.1
+ * @version: v1.0.2
  * @author: Israel Moraes
  * 
  * Created by Israel Moraes on 2020-07-13. Please report any bug at https://github.com/IsraelFM/jQuery-multiAutocomplete
