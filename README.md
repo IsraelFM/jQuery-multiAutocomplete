@@ -21,6 +21,13 @@ jQuery-multiAutocomplete has been tested with jQuery 1.7+ on major browsers:
 - Opera 28+
 - IE (not suported)
 
+## CDN
+
+### jsDelivr
+
+- JavaScript: https://cdn.jsdelivr.net/gh/IsraelFM/jquery-multiautocomplete/dist/jquery-multiautocomplete.min.js
+- CSS: https://cdn.jsdelivr.net/gh/IsraelFM/jquery-multiautocomplete/dist/jquery-multiautocomplete.min.css
+
 ## Supported options
 
 | Option | Default | Description |
