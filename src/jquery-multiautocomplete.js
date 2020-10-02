@@ -1,6 +1,6 @@
 /**
  * jQuery-multiAutocomplete
- * @version: v1.0.2
+ * @version: v1.1.0
  * @author: Israel Moraes
  * 
  * Created by Israel Moraes on 2020-07-13. Please report any bug at https://github.com/IsraelFM/jQuery-multiAutocomplete
@@ -233,7 +233,7 @@
 
                 el.attr('autocomplete', 'off');
                 // Creating container of suggestions
-                let suggestionsElement = utils.createContainer(jPlugin.class.suggestions); // reference to the actual DOM element
+                let suggestionsElement = utils.createContainer(jPlugin.class.suggestions, jPlugin.options.maxShowSuggestion); // reference to the actual DOM element
                 suggestionsContainer = el.after(suggestionsElement).next();
 
                 prototype.destroyEvents();
@@ -263,12 +263,14 @@
     },
     utils = (function () {
         return {
-            createContainer: function (containerClass) {
+            createContainer: function (containerClass, maxShowSuggestion) {
+                const SIZE_EACH_SUGGESTION = 19.1;
+                let maxHeight = maxShowSuggestion*SIZE_EACH_SUGGESTION;
                 let div = document.createElement('div');
                 div.className = containerClass;
                 div.style['position'] = 'absolute';
                 div.style['display'] = 'none';
-                div.style['max-height'] = '100px';
+                div.style['max-height'] = maxHeight+'px';
                 div.style['overflow-y'] = 'auto';
                 return div;
             }
@@ -310,7 +312,8 @@
         endingSymbols: '',
         prefixRegexps: /.*/,
         stopSuggestionKeys: [9, 13],
-		ignoreCase: false
+        ignoreCase: false,
+        maxShowSuggestion: 10
     };
 
     $.jPluginDefaults = $.jPluginDefaults || {};
