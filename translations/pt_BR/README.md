@@ -31,7 +31,7 @@ O jQuery-multiAutocomplete foi testado com o jQuery 1.7+ nos principais navegado
 | `endingSymbols` | '' (string vazia) | Essa opção aceita um conjunto de caracteres (string), que irão ser concatenados a uma sugestão, após a seleção dela. Ex.: ', ' |
 | `prefixRegexps` | `/.*/` | Essa opção aceita apenas expressões regulares. Ela especifica o prefixo obrigatório a ser digitado, para que as sugestões comecem a aparecer. |
 | `stopSuggestionKeys` | `[9, 13]` | Essa opção aceita apenas um array de elementos. Teclas que serão pressionadas para confirmar a escolha de uma sugestão. Por padrão, são <kbd>Tab</kbd> ou <kbd>Enter</kbd>. |
-| `ignoreCase` | `false` | Case sensitive ativado por padrão. Caso queira tornar case insensitive, basta setar para `true`. |
+| `ignoreCase` | `false` | Case sensitive ativado por padrão. Caso queira tornar case insensitive, basta setar para `true`. | `maxShowSuggestion` | `10` | Quantidade máxima de sugestões visíveis por vez, na lista de sugestões. |
 
 ## Métodos Suportados
 
