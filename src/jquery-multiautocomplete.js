@@ -1,6 +1,6 @@
 /**
  * jQuery-multiAutocomplete
- * @version: v1.1.0
+ * @version: v1.1.1
  * @author: Israel Moraes
  * 
  * Created by Israel Moraes on 2020-07-13. Please report any bug at https://github.com/IsraelFM/jQuery-multiAutocomplete
@@ -46,6 +46,9 @@
                             let selectedSuggestion = suggestionsContainer.find(`.${jPlugin.class.suggestion}.${jPlugin.class.selected}`).html();
                             prototype.updateSelection(prototype.getCompletion(selectedSuggestion));
                         }
+
+                        el.blur()
+                        el.focus();
                         return false;
                     }
                 })
