@@ -39,6 +39,7 @@ jQuery-multiAutocomplete has been tested with jQuery 1.7+ on major browsers:
 | `prefixRegexps` | `/.*/` | This option accepts only regular expressions. It specifies the mandatory prefix to be entered, so that suggestions start to appear. |
 | `stopSuggestionKeys` | `[9, 13]` | This option accepts only one array of elements. Keys that will be pressed to confirm the choice of a suggestion. By default, the keys are <kbd>Tab</kbd> or <kbd>Enter</kbd>. |
 | `ignoreCase` | `false` | Case sensitive enabled by default. If you want to make case insensitive, just set it to `true`. |
+| `maxShowSuggestion` | `10` | Maximum number of suggestions visible at a time in the list of suggestions. |
 
 ## Supported methods
 
