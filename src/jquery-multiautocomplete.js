@@ -34,9 +34,40 @@
                     if(event.keyCode === keys.SPACE) {
                         if (event.metaKey || event.ctrlKey) {
                             prototype.createSuggestionContainers();
-                            suggestionsContainer.find(`.${suggestionClass}`).get(0).scrollIntoView({block: 'nearest'});
+                            const suggestionElements = suggestionsContainer.find(`.${suggestionClass}`);
+                            if (suggestionElements.length) {
+                                suggestionElements.get(0).scrollIntoView({block: 'nearest'});
+                            }
                         } else {
                             suggestionsContainer.hide();
+                        }
+                    }
+
+                    if (event.keyCode === keys.PAGEDOWN) {
+                        const selectorSelected = suggestionsContainer.find(`.${selectedClass}`);
+
+                        if (selectorSelected.length) {
+                            selectorSelected.removeClass(selectedClass);
+                            jPlugin.selectedIndex = selectorSelected.data('index')+jPlugin.options.maxShowSuggestion;
+
+                            if(jPlugin.selectedIndex > suggestionsContainer.children().length) {
+                                jPlugin.selectedIndex = suggestionsContainer.children().last().data('index');
+                            }
+                            suggestionsContainer.children().eq(jPlugin.selectedIndex).addClass(selectedClass).get(0).scrollIntoView(true);
+                        }
+                    }
+
+                    if (event.keyCode === keys.PAGEUP) {
+                        const selectorSelected = suggestionsContainer.find(`.${selectedClass}`);
+
+                        if (selectorSelected.length) {
+                            selectorSelected.removeClass(selectedClass);
+                            jPlugin.selectedIndex = selectorSelected.data('index')-jPlugin.options.maxShowSuggestion;
+
+                            if(jPlugin.selectedIndex < 0) {
+                                jPlugin.selectedIndex = suggestionsContainer.children().first().data('index');
+                            }
+                            suggestionsContainer.children().eq(jPlugin.selectedIndex).addClass(selectedClass).get(0).scrollIntoView(true);
                         }
                     }
 
@@ -77,6 +108,8 @@
                     switch (event.keyCode) {
                         case keys.UP:
                         case keys.DOWN:
+                        case keys.PAGEDOWN:
+                        case keys.PAGEUP:
                             break;    
                         case keys.LEFT:
                         case keys.RIGHT:
