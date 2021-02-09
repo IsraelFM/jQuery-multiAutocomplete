@@ -1,6 +1,6 @@
 /**
  * jQuery-multiAutocomplete
- * @version: v1.1.1
+ * @version: v1.2.0
  * @author: Israel Moraes
  * 
  * Created by Israel Moraes on 2020-07-13. Please report any bug at https://github.com/IsraelFM/jQuery-multiAutocomplete
@@ -29,6 +29,8 @@
             events: function () {
                 el
                 .on('keydown.multiAutocomplete', function (event) {
+                    const suggestionClass = jPlugin.class.suggestion, selectedClass = jPlugin.class.selected;
+
                     if(event.keyCode === keys.SPACE) {
                         if (event.metaKey || event.ctrlKey) {
                             prototype.createSuggestionContainers();
@@ -37,13 +39,58 @@
                         }
                     }
 
-                    if (event.keyCode === keys.UP || event.keyCode === keys.DOWN) {
-                        return false;
+                    // TODO: REESCREVER AS FUNÇÕES ABAIXO. MELHORAR A LEGIBILIDADE
+                    if (event.keyCode === keys.PAGEDOWN) {
+                        const selectorSelected = suggestionsContainer.find(`.${selectedClass}`);
+
+                        if (selectorSelected.length) {
+                            selectorSelected.removeClass(selectedClass);
+                            jPlugin.selectedIndex = selectorSelected.data('index')+jPlugin.options.maxShowSuggestion;
+
+                            if(jPlugin.selectedIndex > suggestionsContainer.children().length) {
+                                jPlugin.selectedIndex = suggestionsContainer.children().last().data('index');
+                            }
+                            suggestionsContainer.children().eq(jPlugin.selectedIndex).addClass(selectedClass).get(0).scrollIntoView({block: 'start'});
+                        }
+                    }
+
+                    if (event.keyCode === keys.PAGEUP) {
+                        const selectorSelected = suggestionsContainer.find(`.${selectedClass}`);
+
+                        if (selectorSelected.length) {
+                            selectorSelected.removeClass(selectedClass);
+                            jPlugin.selectedIndex = selectorSelected.data('index')-jPlugin.options.maxShowSuggestion;
+
+                            if(jPlugin.selectedIndex < 0) {
+                                jPlugin.selectedIndex = suggestionsContainer.children().first().data('index');
+                            }
+                            suggestionsContainer.children().eq(jPlugin.selectedIndex).addClass(selectedClass).get(0).scrollIntoView({block: 'end'});
+                        }
+                    }
+
+                    if (event.keyCode === keys.DOWN) {
+                        const selectorSelected = suggestionsContainer.find(`.${selectedClass}`);
+
+                        if (selectorSelected.next(`.${suggestionClass}`).length) {
+                            selectorSelected.removeClass(selectedClass).next().addClass(selectedClass);
+                            jPlugin.selectedIndex = selectorSelected.data('index');
+                            selectorSelected.next(`.${suggestionClass}`).get(0).scrollIntoView({block: 'nearest'});
+                        }
+                    }
+
+                    if (event.keyCode === keys.UP) {
+                        const selectorSelected = suggestionsContainer.find(`.${selectedClass}`);
+
+                        if (selectorSelected.prev(`.${suggestionClass}`).length) {
+                            selectorSelected.removeClass(selectedClass).prev().addClass(selectedClass);
+                            jPlugin.selectedIndex = selectorSelected.data('index');
+                            selectorSelected.prev(`.${suggestionClass}`).get(0).scrollIntoView({block: 'nearest'});
+                        }
                     }
 
                     if ($.inArray(event.keyCode, jPlugin.options.stopSuggestionKeys) !== -1) {
                         if (suggestionsContainer.children().length > 0) {
-                            let selectedSuggestion = suggestionsContainer.find(`.${jPlugin.class.suggestion}.${jPlugin.class.selected}`).html();
+                            let selectedSuggestion = suggestionsContainer.find(`.${suggestionClass}.${selectedClass}`).html();
                             prototype.updateSelection(prototype.getCompletion(selectedSuggestion));
                         }
 
@@ -53,12 +100,14 @@
                     }
                 })
                 .on('keyup.multiAutocomplete', function (event) {
-                    let hasSpecialKeys = event.altKey || event.metaKey || event.ctrlKey,
-                        suggestionClass = jPlugin.class.suggestion,
-                        selectedClass = jPlugin.class.selected,
-                        selectorSelected;
+                    const hasSpecialKeys = event.altKey || event.metaKey || event.ctrlKey;
 
                     switch (event.keyCode) {
+                        case keys.UP:
+                        case keys.DOWN:
+                        case keys.PAGEDOWN:
+                        case keys.PAGEUP:
+                            break;    
                         case keys.LEFT:
                         case keys.RIGHT:
                         case keys.TAB:
@@ -70,20 +119,6 @@
                             break;
                         case keys.ESC:
                             suggestionsContainer.hide();
-                            break;
-                        case keys.UP:
-                            if (jPlugin.selectedIndex > 0) {
-                                selectorSelected = suggestionsContainer.find(`.${suggestionClass}:not(:first-child).${selectedClass}`).removeClass(selectedClass).prev().addClass(selectedClass);
-                                jPlugin.selectedIndex = selectorSelected.data('index');
-                                selectorSelected.get(0).scrollIntoView({block: 'nearest'});
-                            }
-                            break;
-                        case keys.DOWN:
-                            if (jPlugin.selectedIndex < suggestionsContainer.children().length-1) {
-                                selectorSelected = suggestionsContainer.find(`.${suggestionClass}:not(:last-child).${selectedClass}`).removeClass(selectedClass).next().addClass(selectedClass);
-                                jPlugin.selectedIndex = selectorSelected.data('index');
-                                selectorSelected.get(0).scrollIntoView({block: 'nearest'});
-                            }
                             break;
                         default:
                             if (suggestionsContainer.is(':visible') || (!hasSpecialKeys && jPlugin.options.autosuggest)) {
@@ -184,6 +219,11 @@
                 suggestionsContainer.html(html);
                 (html) ? suggestionsContainer.show() : suggestionsContainer.hide();
                 jPlugin.selectedIndex = 0;
+
+                const suggestionElements = suggestionsContainer.find(`.${jPlugin.class.suggestion}`);
+                if (suggestionElements.length) {
+                    suggestionElements.get(0).scrollIntoView({block: 'nearest'});
+                }
             },
             getCompletion: function (selectedSuggestion) {
                 let textBeforeCursor = prototype.getChunk(),
