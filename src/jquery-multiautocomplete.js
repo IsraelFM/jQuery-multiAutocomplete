@@ -150,7 +150,7 @@
                 })
             },
             destroyEvents: function () {
-                el.off(['keypress', 'keydown', 'keyup', 'blur', 'mouseout', 'mouseover', 'mousedown', ''].join('.multiAutocomplete '));
+                el.off(['keydown', 'keyup', 'blur', 'mouseout', 'mouseover', 'mousedown', ''].join('.multiAutocomplete '));
             },
             getChunk: function () {
                 let delimiters = jPlugin.options.delimiters.split(''),
