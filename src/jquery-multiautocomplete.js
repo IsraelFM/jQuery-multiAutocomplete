@@ -29,21 +29,40 @@
             events: function () {
                 el
                 .on('keydown.multiAutocomplete', function (event) {
+                    const suggestionClass = jPlugin.class.suggestion, selectedClass = jPlugin.class.selected;
+
                     if(event.keyCode === keys.SPACE) {
                         if (event.metaKey || event.ctrlKey) {
                             prototype.createSuggestionContainers();
+                            suggestionsContainer.find(`.${suggestionClass}`).get(0).scrollIntoView({block: 'nearest'});
                         } else {
                             suggestionsContainer.hide();
                         }
                     }
 
-                    if (event.keyCode === keys.UP || event.keyCode === keys.DOWN) {
-                        return false;
+                    if (event.keyCode === keys.DOWN) {
+                        const selectorSelected = suggestionsContainer.find(`.${selectedClass}`);
+
+                        if (selectorSelected.next(`.${suggestionClass}`).length) {
+                            selectorSelected.removeClass(selectedClass).next().addClass(selectedClass);
+                            jPlugin.selectedIndex = selectorSelected.data('index');
+                            selectorSelected.next(`.${suggestionClass}`).get(0).scrollIntoView({block: 'nearest'});
+                        }
+                    }
+
+                    if (event.keyCode === keys.UP) {
+                        const selectorSelected = suggestionsContainer.find(`.${selectedClass}`);
+
+                        if (selectorSelected.prev(`.${suggestionClass}`).length) {
+                            selectorSelected.removeClass(selectedClass).prev().addClass(selectedClass);
+                            jPlugin.selectedIndex = selectorSelected.data('index');
+                            selectorSelected.prev(`.${suggestionClass}`).get(0).scrollIntoView({block: 'nearest'});
+                        }
                     }
 
                     if ($.inArray(event.keyCode, jPlugin.options.stopSuggestionKeys) !== -1) {
                         if (suggestionsContainer.children().length > 0) {
-                            let selectedSuggestion = suggestionsContainer.find(`.${jPlugin.class.suggestion}.${jPlugin.class.selected}`).html();
+                            let selectedSuggestion = suggestionsContainer.find(`.${suggestionClass}.${selectedClass}`).html();
                             prototype.updateSelection(prototype.getCompletion(selectedSuggestion));
                         }
 
@@ -53,12 +72,12 @@
                     }
                 })
                 .on('keyup.multiAutocomplete', function (event) {
-                    let hasSpecialKeys = event.altKey || event.metaKey || event.ctrlKey,
-                        suggestionClass = jPlugin.class.suggestion,
-                        selectedClass = jPlugin.class.selected,
-                        selectorSelected;
+                    const hasSpecialKeys = event.altKey || event.metaKey || event.ctrlKey;
 
                     switch (event.keyCode) {
+                        case keys.UP:
+                        case keys.DOWN:
+                            break;    
                         case keys.LEFT:
                         case keys.RIGHT:
                         case keys.TAB:
@@ -70,20 +89,6 @@
                             break;
                         case keys.ESC:
                             suggestionsContainer.hide();
-                            break;
-                        case keys.UP:
-                            if (jPlugin.selectedIndex > 0) {
-                                selectorSelected = suggestionsContainer.find(`.${suggestionClass}:not(:first-child).${selectedClass}`).removeClass(selectedClass).prev().addClass(selectedClass);
-                                jPlugin.selectedIndex = selectorSelected.data('index');
-                                selectorSelected.get(0).scrollIntoView({block: 'nearest'});
-                            }
-                            break;
-                        case keys.DOWN:
-                            if (jPlugin.selectedIndex < suggestionsContainer.children().length-1) {
-                                selectorSelected = suggestionsContainer.find(`.${suggestionClass}:not(:last-child).${selectedClass}`).removeClass(selectedClass).next().addClass(selectedClass);
-                                jPlugin.selectedIndex = selectorSelected.data('index');
-                                selectorSelected.get(0).scrollIntoView({block: 'nearest'});
-                            }
                             break;
                         default:
                             if (suggestionsContainer.is(':visible') || (!hasSpecialKeys && jPlugin.options.autosuggest)) {
@@ -115,7 +120,7 @@
                 })
             },
             destroyEvents: function () {
-                el.off(['keydown', 'keyup', 'blur', 'mouseout', 'mouseover', 'mousedown', ''].join('.multiAutocomplete '));
+                el.off(['keypress', 'keydown', 'keyup', 'blur', 'mouseout', 'mouseover', 'mousedown', ''].join('.multiAutocomplete '));
             },
             getChunk: function () {
                 let delimiters = jPlugin.options.delimiters.split(''),
