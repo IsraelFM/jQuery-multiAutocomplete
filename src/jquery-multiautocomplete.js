@@ -34,15 +34,12 @@
                     if(event.keyCode === keys.SPACE) {
                         if (event.metaKey || event.ctrlKey) {
                             prototype.createSuggestionContainers();
-                            const suggestionElements = suggestionsContainer.find(`.${suggestionClass}`);
-                            if (suggestionElements.length) {
-                                suggestionElements.get(0).scrollIntoView({block: 'nearest'});
-                            }
                         } else {
                             suggestionsContainer.hide();
                         }
                     }
 
+                    // TODO: REESCREVER AS FUNÇÕES ABAIXO. MELHORAR A LEGIBILIDADE
                     if (event.keyCode === keys.PAGEDOWN) {
                         const selectorSelected = suggestionsContainer.find(`.${selectedClass}`);
 
@@ -53,7 +50,7 @@
                             if(jPlugin.selectedIndex > suggestionsContainer.children().length) {
                                 jPlugin.selectedIndex = suggestionsContainer.children().last().data('index');
                             }
-                            suggestionsContainer.children().eq(jPlugin.selectedIndex).addClass(selectedClass).get(0).scrollIntoView(true);
+                            suggestionsContainer.children().eq(jPlugin.selectedIndex).addClass(selectedClass).get(0).scrollIntoView({block: 'start'});
                         }
                     }
 
@@ -67,7 +64,7 @@
                             if(jPlugin.selectedIndex < 0) {
                                 jPlugin.selectedIndex = suggestionsContainer.children().first().data('index');
                             }
-                            suggestionsContainer.children().eq(jPlugin.selectedIndex).addClass(selectedClass).get(0).scrollIntoView(true);
+                            suggestionsContainer.children().eq(jPlugin.selectedIndex).addClass(selectedClass).get(0).scrollIntoView({block: 'end'});
                         }
                     }
 
@@ -222,6 +219,11 @@
                 suggestionsContainer.html(html);
                 (html) ? suggestionsContainer.show() : suggestionsContainer.hide();
                 jPlugin.selectedIndex = 0;
+
+                const suggestionElements = suggestionsContainer.find(`.${jPlugin.class.suggestion}`);
+                if (suggestionElements.length) {
+                    suggestionElements.get(0).scrollIntoView({block: 'nearest'});
+                }
             },
             getCompletion: function (selectedSuggestion) {
                 let textBeforeCursor = prototype.getChunk(),
